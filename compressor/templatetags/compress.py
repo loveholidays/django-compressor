@@ -118,7 +118,7 @@ class CompressorNode(CompressorMixin, template.Node):
     def get_original_content(self, context):
         return self.nodelist.render(context)
 
-    def render(self, context, forced=False):
+    def render(self, context, forced=True):
 
         # Check if in debug mode
         if self.debug_mode(context):
