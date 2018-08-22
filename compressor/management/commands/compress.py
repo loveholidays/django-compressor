@@ -234,7 +234,7 @@ class Command(BaseCommand):
                         continue
 
                     parser.process_node(template, context, node)
-                    rendered = parser.render_nodelist(template, context, node)
+                    rendered = parser.render_nodelist(template, template.Context({}), node)
                     key = get_offline_hexdigest(rendered)
 
                     if key in offline_manifest:
@@ -242,6 +242,7 @@ class Command(BaseCommand):
 
                     try:
                         result = parser.render_node(template, context, node)
+                        result = result.replace(context.get('STATIC_URL'), '__STATIC_URL__')
                     except Exception as e:
                         raise CommandError("An error occurred during rendering %s: "
                                            "%s" % (template.template_name, e))

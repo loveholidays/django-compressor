@@ -61,7 +61,7 @@ class CompressorMixin(object):
         If enabled and in offline mode, and not forced check the offline cache
         and return the result if given
         """
-        key = get_offline_hexdigest(self.get_original_content(context))
+        key = get_offline_hexdigest(self.get_original_content(template.Context({})))
         offline_manifest = get_offline_manifest()
         if key in offline_manifest:
             return offline_manifest[key]
@@ -83,7 +83,7 @@ class CompressorMixin(object):
 
         # See if it has been rendered offline
         if self.is_offline_compression_enabled(forced) and not forced:
-            return self.render_offline(context)
+            return self.render_offline(context).replace("__STATIC_URL__", context.get('STATIC_URL'))
 
         # Take a shortcut if we really don't have anything to do
         if (not settings.COMPRESS_ENABLED and
